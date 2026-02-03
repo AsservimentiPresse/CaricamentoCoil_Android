@@ -35,6 +35,26 @@
   }
   /* ↑↑↑ Questo stile modifica SOLO il bottone AR */
 
+  /* Pulsante Play / Pause */
+#animBtn {
+margin: 10px;
+padding: 12px 24px;
+font-size: 1.1rem;
+border-radius: 12px;
+border: none;
+cursor: pointer;
+background: #444;
+color: white;
+}
+
+/* Dropdown animazioni */
+#animSelect {
+padding: 10px;
+font-size: 1rem;
+border-radius: 10px;
+margin-bottom: 10px;
+}
+  
   /* Contenitore delle sezioni */
   .controls-section {
     display: flex;
@@ -92,6 +112,17 @@
     quick-look-browsers="safari">
   </model-viewer>
 
+  <!-- SELECT ANIMAZIONE -->
+<select id="animSelect" onchange="selectAnimation()">
+<option disabled selected>Seleziona animazione</option>
+</select>
+
+<!-- PLAY / PAUSE -->
+<button id="animBtn" onclick="toggleAnimation()">
+▶ Play animation
+</button>
+
+  
   <!-- Prima fila: Structure color -->
   <div class="controls-section">
     <h3>Structure Color</h3>
@@ -121,7 +152,46 @@
   <p>Se sei su Android, tocca l’icona AR in basso a destra.</p>
 
   <script>
-    const modelViewer = document.querySelector('#viewer');
+  <!-- SCRIPT -->
+<script>
+const modelViewer = document.querySelector('#viewer');
+const animBtn = document.getElementById('animBtn');
+const animSelect = document.getElementById('animSelect');
+
+/* Carica animazioni */
+modelViewer.addEventListener('load', () => {
+const animations = modelViewer.availableAnimations;
+
+animations.forEach(anim => {
+const option = document.createElement('option');
+option.value = anim;
+option.textContent = anim;
+animSelect.appendChild(option);
+});
+
+if (animations.length > 0) {
+modelViewer.animationName = animations[0];
+}
+});
+
+/* Play / Pause */
+function toggleAnimation() {
+if (modelViewer.paused) {
+modelViewer.play();
+animBtn.textContent = "⏸ Pause animation";
+} else {
+modelViewer.pause();
+animBtn.textContent = "▶ Play animation";
+}
+}
+
+/* Cambio animazione */
+function selectAnimation() {
+modelViewer.pause();
+modelViewer.animationName = animSelect.value;
+modelViewer.play();
+animBtn.textContent = "⏸ Pause animation";
+}
 
     async function changeColor(materialIndex, rgba) {
       const material = modelViewer.model.materials[materialIndex];
@@ -132,6 +202,7 @@
   </script>
 </body>
 </html>
+
 
 
 
