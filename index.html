@@ -105,7 +105,6 @@ margin-bottom: 10px;
     ar-modes="scene-viewer"
     camera-controls
     auto-rotate
-    autoplay
     shadow-intensity="1"
     exposure="1"
     alt="ASSIEME Model"
@@ -193,15 +192,17 @@ modelViewer.play();
 animBtn.textContent = "⏸ Pause animation";
 }
 
-    async function changeColor(materialIndex, rgba) {
-      const material = modelViewer.model.materials[materialIndex];
-      if (material && material.pbrMetallicRoughness) {
-        material.pbrMetallicRoughness.setBaseColorFactor(rgba);
-      }
+/* Cambio colore materiali */
+function changeColor(materialIndex, rgba) {
+const material = modelViewer.model.materials[materialIndex];
+if (material && material.pbrMetallicRoughness) {
+material.pbrMetallicRoughness.setBaseColorFactor(rgba);
+}
     }
   </script>
 </body>
 </html>
+
 
 
 
