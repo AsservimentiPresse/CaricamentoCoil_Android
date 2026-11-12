@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ASSIEME - Android AR Viewer</title>
+
+<!-- MODEL VIEWER - VERSIONE FISSATA -->
+<script type="module"
+src="https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.glb"
+</script>
+
+<style>
+
+/* PAGINA */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* MODEL VIEWER */
+
+model-viewer {
+    width: 100%;
+    height: 70vh;
+    min-height: 350px;
+    background: #000;
+}
+
+/* PULSANTE AR */
+
+model-viewer::part(default-ar-button) {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: white;
+    color: black;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* DIAGNOSTICA */
+
+#status {
+    margin: 8px;
+    padding: 8px;
+    font-size: 13px;
+    color: #00ff88;
+    text-align: center;
+    min-height: 30px;
+}
+
+/* ANIMAZIONI */
+
+#animSelect {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 10px;
+    max-width: 95%;
+}
+
+#animBtn {
+    margin: 10px;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: #444;
+    color: white;
+}
+
+#animBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* SEZIONI COLORI */
+
+.controls-section {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 8px 0;
+    width: 95%;
+    gap: 8px;
+}
+
+.controls-section h3 {
+    margin: 5px 12px 5px 0;
+    font-size: 1.1rem;
+    min-width: 150px;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* PULSANTI */
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: white;
+    min-width: 70px;
+    touch-action: manipulation;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+/* COLORI */
+
+.green {
+    background: green;
+}
+
+.blue {
+    background: blue;
+}
+
+.yellow {
+    background: yellow;
+    color: gray;
+}
+
+.lightgray {
+    background: lightgray;
+    color: black;
+}
+
+.darkgray {
+    background: dimgray;
+}
+
+.red {
+    background: red;
+}
+
+.orange {
+    background: orange;
+    color: white;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    model-viewer {
+        height: 65vh;
+    }
+
+    .controls-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .controls-section h3 {
+        min-width: auto;
+    }
+
+    .controls {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================================= -->
+<!-- MODELLO 3D E REALTA' AUMENTATA -->
+<!-- ================================= -->
+
+<model-viewer
+
+    id="viewer"
+
+    src="./linea%20lunga_V4.glb"
+
+    ar
+
+    ar-modes="scene-viewer"
+
+    camera-controls
+
+    auto-rotate
+
+    shadow-intensity="0"
+
+    exposure="0.6"
+
+    loading="eager"
+
+    reveal="auto"
+
+    alt="ASSIEME 3D Model">
+
+</model-viewer>
+
+
+<!-- ================================= -->
+<!-- DIAGNOSTICA -->
+<!-- ================================= -->
+
+<div id="status">
+
+Caricamento modello 3D...
+
+</div>
+
+
+<!-- ================================= -->
+<!-- SELEZIONE ANIMAZIONE -->
+<!-- ================================= -->
+
+<select id="animSelect" disabled>
+
+    <option value="" disabled selected>
+        Seleziona animazione
+    </option>
+
+</select>
+
+
+<!-- ================================= -->
+<!-- PLAY / PAUSE -->
+<!-- ================================= -->
+
+<button id="animBtn" disabled>
+
+    ▶ Play animation
+
+</button>
+
+
+<!-- ================================= -->
+<!-- STRUCTURE COLOR -->
+<!-- ================================= -->
+
+<div class="controls-section">
+
+    <h3>Structure Color</h3>
+
+    <div class="controls">
+
+        <button class="green"
+        data-material="0"
+        data-color="0,0.1,0,1">
+            Verde
+        </button>
+
+        <button class="blue"
+        data-material="0"
+        data-color="0,0,0.18,1">
+            Blu
+        </button>
+
+        <button class="orange"
+        data-material="0"
+        data-color="1,0.12,0,1">
+            Arancio
+        </button>
+
+        <button class="lightgray"
+        data-material="0"
+        data-color="0.55,0.55,0.55,1">
+            Grigio chiaro
+        </button>
+
+        <button class="darkgray"
+        data-material="0"
+        data-color="0.25,0.25,0.25,1">
+            Grigio scuro
+        </button>
+
+        <button class="red"
+        data-material="0"
+        data-color="0.22,0,0,1">
+            Rosso
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================================= -->
+<!-- MOBILE PARTS COLOR -->
+<!-- ================================= -->
+
+<div class="controls-section">
+
+    <h3>Mobile Parts Color</h3>
+
+    <div class="controls">
+
+        <button class="green"
+        data-material="2"
+        data-color="0,0.1,0,1">
+            Verde
+        </button>
+
+        <button class="blue"
+        data-material="2"
+        data-color="0,0,1,1">
+            Blu
+        </button>
+
+        <button class="yellow"
+        data-material="2"
+        data-color="1,1,0,1">
+            Giallo
+        </button>
+
+        <button class="lightgray"
+        data-material="2"
+        data-color="0.55,0.55,0.55,1">
+            Grigio chiaro
+        </button>
+
+        <button class="darkgray"
+        data-material="2"
+        data-color="0.33,0.33,0.33,1">
+            Grigio scuro
+        </button>
+
+        <button class="red"
+        data-material="2"
+        data-color="1,0,0,1">
+            Rosso
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================= -->
+
+<script type="module">
+
+const modelViewer = document.querySelector("#viewer");
+
+const animBtn = document.querySelector("#animBtn");
+
+const animSelect = document.querySelector("#animSelect");
+
+const statusBox = document.querySelector("#status");
+
+
+let modelLoaded = false;
+
+let animations = [];
+
+
+/* ================================= */
+/* CARICAMENTO MODELLO */
+/* ================================= */
+
+modelViewer.addEventListener("load", () => {
+
+    modelLoaded = true;
+
+    animations = modelViewer.availableAnimations || [];
+
+    animSelect.innerHTML =
+        '<option value="" disabled selected>Seleziona animazione</option>';
+
+    if (animations.length > 0) {
+
+        animations.forEach((animation) => {
+
+            const option = document.createElement("option");
+
+            option.value = animation;
+
+            option.textContent = animation;
+
+            animSelect.appendChild(option);
+
+        });
+
+        modelViewer.animationName = animations[0];
+
+        animSelect.value = animations[0];
+
+        animSelect.disabled = false;
+
+        animBtn.disabled = false;
+
+    } else {
+
+        animSelect.disabled = true;
+
+        animBtn.disabled = true;
+
+    }
+
+    if (modelViewer.canActivateAR) {
+
+        statusBox.textContent =
+            "Modello caricato - AR disponibile";
+
+    } else {
+
+        statusBox.textContent =
+            "Modello caricato - AR non disponibile su questo dispositivo";
+
+    }
+
+    console.log("Modello caricato correttamente");
+
+    console.log("Animazioni:", animations);
+
+    console.log("AR disponibile:", modelViewer.canActivateAR);
+
+});
+
+
+/* ================================= */
+/* ERRORI MODELLO */
+/* ================================= */
+
+modelViewer.addEventListener("error", (event) => {
+
+    modelLoaded = false;
+
+    statusBox.textContent =
+        "ERRORE: impossibile caricare il modello 3D";
+
+    console.error("Errore Model Viewer:", event);
+
+});
+
+
+/* ================================= */
+/* AVANZAMENTO CARICAMENTO */
+/* ================================= */
+
+modelViewer.addEventListener("progress", (event) => {
+
+    if (!modelLoaded) {
+
+        const progress = Math.round(
+            event.detail.totalProgress * 100
+        );
+
+        statusBox.textContent =
+            "Caricamento modello: " + progress + "%";
+
+    }
+
+});
+
+
+/* ================================= */
+/* STATO REALTA' AUMENTATA */
+/* ================================= */
+
+modelViewer.addEventListener("ar-status", (event) => {
+
+    const arStatus = event.detail.status;
+
+    console.log("AR Status:", arStatus);
+
+    if (arStatus === "session-started") {
+
+        statusBox.textContent =
+            "Realtà aumentata avviata";
+
+    }
+
+    if (arStatus === "object-placed") {
+
+        statusBox.textContent =
+            "Modello posizionato nell'ambiente";
+
+    }
+
+    if (arStatus === "failed") {
+
+        statusBox.textContent =
+            "Errore avvio AR: controllare compatibilità e permessi";
+
+    }
+
+});
+
+
+/* ================================= */
+/* PLAY / PAUSE ANIMAZIONE */
+/* ================================= */
+
+function toggleAnimation() {
+
+    if (!modelLoaded || animations.length === 0) {
+
+        return;
+
+    }
+
+    if (modelViewer.paused) {
+
+        modelViewer.play();
+
+        animBtn.textContent =
+            "⏸ Pause animation";
+
+    } else {
+
+        modelViewer.pause();
+
+        animBtn.textContent =
+            "▶ Play animation";
+
+    }
+
+}
+
+
+/* ================================= */
+/* SELEZIONE ANIMAZIONE */
+/* ================================= */
+
+function selectAnimation() {
+
+    if (!modelLoaded || !animSelect.value) {
+
+        return;
+
+    }
+
+    modelViewer.pause();
+
+    modelViewer.animationName = animSelect.value;
+
+    modelViewer.play();
+
+    animBtn.textContent =
+        "⏸ Pause animation";
+
+}
+
+
+/* ================================= */
+/* CAMBIO COLORE MATERIALI */
+/* ================================= */
+
+function changeColor(materialIndex, rgba) {
+
+    if (!modelLoaded || !modelViewer.model) {
+
+        console.warn("Modello non ancora caricato");
+
+        return;
+
+    }
+
+    const materials = modelViewer.model.materials;
+
+    const material = materials[materialIndex];
+
+    if (material && material.pbrMetallicRoughness) {
+
+        material.pbrMetallicRoughness.setBaseColorFactor(rgba);
+
+        console.log(
+            "Colore modificato - Materiale:",
+            materialIndex,
+            rgba
+        );
+
+    } else {
+
+        console.warn(
+            "Materiale non trovato:",
+            materialIndex
+        );
+
+    }
+
+}
+
+
+/* ================================= */
+/* EVENTI PULSANTI ANIMAZIONE */
+/* ================================= */
+
+animBtn.addEventListener("click", toggleAnimation);
+
+animSelect.addEventListener("change", selectAnimation);
+
+
+/* ================================= */
+/* EVENTI PULSANTI COLORI */
+/* ================================= */
+
+document.querySelectorAll("[data-material]").forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+        const materialIndex = Number(
+            button.dataset.material
+        );
+
+        const rgba = button.dataset.color
+            .split(",")
+            .map(Number);
+
+        changeColor(materialIndex, rgba);
+
+    });
+
+});
+
+
+</script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
